@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LaTeX Viewer</title>
+    
+    <!-- Load MathJax to read the LaTeX code -->
+    <script src="https://polyfill.io"></script>
+    <script id="MathJax-script" async src="https://jsdelivr.net"></script>
+    
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            font-size: 18px;
+        }
+        .math-box {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Math Formulas</h2>
+    
+    <!-- MathJax looks for $$ for big formulas and \( \) for inline text -->
+    <div class="math-box">
+        <p>This is a fraction inside a sentence: \( \frac{1}{2} \)</p>
+        
+        <p>This is the Quadratic Formula shown on its own line:</p>
+        $$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$
+    </div>
+
+</body>
+</html>
