@@ -3,37 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LaTeX Viewer</title>
+    <title>LaTeX Live Viewer</title>
     
-    <!-- Load MathJax to read the LaTeX code -->
+    <!-- Load MathJax to convert LaTeX into math symbols -->
     <script src="https://polyfill.io"></script>
     <script id="MathJax-script" async src="https://jsdelivr.net"></script>
     
     <style>
         body {
-            font-family: sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             padding: 20px;
+            background-color: #f9f9fb;
+            color: #333;
+        }
+        h2 {
+            margin-bottom: 5px;
+        }
+        p.hint {
+            font-size: 14px;
+            color: #666;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 12px;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: monospace;
+            resize: vertical;
+        }
+        textarea:focus {
+            border-color: #007aff;
+            outline: none;
+        }
+        button {
+            background-color: #007aff;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+        }
+        button:active {
+            background-color: #0056b3;
+        }
+        .output-heading {
+            margin-top: 25px;
             font-size: 18px;
+            font-weight: bold;
         }
         .math-box {
-            background-color: #f5f5f5;
-            padding: 15px;
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #e5e5ea;
             border-radius: 8px;
-            margin-top: 10px;
+            margin-top: 5px;
+            min-height: 60px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            overflow-x: auto;
         }
     </style>
 </head>
 <body>
 
-    <h2>Math Formulas</h2>
+    <h2>LaTeX Live Editor</h2>
+    <p class="hint">Use <code>\( ... \)</code> for inline text or <code>$$ ... $$</code> for a big block.</p>
     
-    <!-- MathJax looks for $$ for big formulas and \( \) for inline text -->
-    <div class="math-box">
-        <p>This is a fraction inside a sentence: \( \frac{1}{2} \)</p>
-        
-        <p>This is the Quadratic Formula shown on its own line:</p>
-        $$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$
+    <!-- Input box for user code -->
+    <textarea id="latexInput" placeholder="Type your LaTeX here... For example: \frac{a}{b} = c^2"></textarea>
+    
+    <!-- Button to trigger conversion -->
+    <button onclick="renderLaTeX()">Render Math</button>
+    
+    <div class="output-heading">Result:</div>
+    <!-- This is where the beautiful math will appear -->
+    <div id="latexOutput" class="math-box">
+        Your rendered math will show up here.
     </div>
+
+    <script>
+        // Set an initial example formula when the page loads
+        document.getElementById('latexInput').value = "The Quadratic Formula is:\n$$x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$$";
+
+        function renderLaTeX() {
+            // 1. Get what the user typed in the text box
+            const userInput = document.getElementById('latexInput').value;
+            
+            // 2. Put that text into our output box
+            const outputBox = document.getElementById('latexOutput');
+            outputBox.innerHTML = userInput;
+            
+            // 3. CRITICAL STEP: Tell MathJax to scan the output box and turn code into math symbols
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                MathJax.typesetPromise([outputBox]).catch(function (err) {
+                    outputBox.innerHTML = "Error rendering LaTeX: " + err.message;
+                });
+            } else {
+                alert("MathJax library is still loading. Please try again in a moment.");
+            }
+        }
+        
+        // Run the function once on load to show the initial example
+        window.addEventListener('load', function() {
+            // Wait a tiny bit for MathJax to finish initializing
+            setTimeout(renderLaTeX, 500);
+        });
+    </script>
 
 </body>
 </html>
